@@ -10,8 +10,13 @@
     "type": "git",
     "url": "https://github.com/andjohae/kandidrone.git"
   },
-  "author": "Andreas Johansson",
-  "license": "",
+  "author": "Andreas Johansson and.johansson93@gmail.com",
+  "contributors": [
+      {"name": "Karl Svensson", "email": ""},
+      {"name": "Adam Josefsson", "email": ""},
+      {"name": "Emil Rosenberg", "email": ""},
+      {"name": "Joachim Benjaminsson", "email": ""}
+  ],
   "bugs": {
     "url": "https://github.com/andjohae/kandidrone/issues"
   },
