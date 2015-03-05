@@ -2,6 +2,13 @@
   "name": "kandidrone",
   "version": "1.0.0",
   "description": "Bachelor thesis project at Chalmers University of Technology.",
+  "author": "Andreas Johansson <and.johansson93@gmail.com>",
+  "contributors": [
+      {"name": "Karl Svensson", "email": ""},
+      {"name": "Adam Josefsson", "email": ""},
+      {"name": "Emil Rosenberg", "email": ""},
+      {"name": "Joachim Benjaminsson", "email": ""}
+  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,15 +17,11 @@
     "type": "git",
     "url": "https://github.com/andjohae/kandidrone.git"
   },
-  "author": "Andreas Johansson and.johansson93@gmail.com",
-  "contributors": [
-      {"name": "Karl Svensson", "email": ""},
-      {"name": "Adam Josefsson", "email": ""},
-      {"name": "Emil Rosenberg", "email": ""},
-      {"name": "Joachim Benjaminsson", "email": ""}
-  ],
   "bugs": {
     "url": "https://github.com/andjohae/kandidrone/issues"
   },
-  "homepage": "https://github.com/andjohae/kandidrone"
+  "homepage": "https://github.com/andjohae/kandidrone",
+  "engines": {
+      "node": "*"
+  }
 }
