@@ -3,7 +3,7 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-name = 'mission-2015-03-05_03-05-01.txt';
+name = 'mission-2015-03-03_03-22-51.txt';
 xmin = 0;   %xmax set automatically
 ymin = -3.5;
 ymax = 3.5;
@@ -131,15 +131,12 @@ legend('Control_ux','Control_uy','Control_uz','Control_uyaw');
 axis(axisVector);
 xlabel('Tid [s]')
 %}
-%%
+%% Stepinfo
 clf;
 clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Set stepvalues (base and top)
-baseValue = 1;
-topValue = 1.5;
 %Choose which state to monitor
-chosenState = 'z';    % x,y or z
+chosenState = 'x';    % x,y or z
 disp(strcat('Chosen state: ',chosenState))
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -161,7 +158,8 @@ t=linspace(1,length(State),length(State));
 t=t';
 t=t.*deltaT;
 
-%Plot steps and responses
+%Plot steps and responses for reference. Obs! must comment
+%clf; further down first
 %{
 figure(2)
 subplot(3,1,1)
@@ -180,8 +178,7 @@ plot(t,State_y)
 legend('y-goal','y-state');
 hold off
 
-%subplot(3,1,3)
-
+subplot(3,1,3)
 title('z-koordinat')
 hold on
 plot(t,Goal_z)
@@ -191,8 +188,12 @@ hold off
 %}
 
 %Extract startIndex and endIndex
+%Set stepvalues (base and top)
+baseValue = min(Goal);
+topValue = max(Goal);
 startIndex = 0;
-endIndex = 0;
+endIndex = length(Goal);    %If step continues till EOF
+                            %let last position be EOF
 i = 1;
 while i<length(Goal)
     if Goal(i)==topValue
@@ -214,17 +215,45 @@ partStep = State(startIndex:endIndex-1);
 partGoal = Goal(startIndex:endIndex-1);
 partT = t(startIndex:endIndex-1);
 
+%Plot step for reference
+clf;
+hold on
+plot(partT,partStep)
+plot(partT,partGoal)
+hold off
+legend('Step','Goal')
+xlabel('Tid[s]')
+ylabel('Distans[m]')
+title(strcat('Steg i ledden:',chosenState))
+
 %Get stepinfo
 ST=0.05;    % 5 percent tolerance for SettlingTime
-S=stepinfo(partStep, partT, topValue,'SettlingTimeThreshold',ST);
-RiseTime        = getfield(S,'RiseTime')
-SettlingTime    = getfield(S,'SettlingTime')
-SettlingMin     = getfield(S,'SettlingMin');
-SettlingMax     = getfield(S,'SettlingMax');
-Overshoot       = getfield(S,'Overshoot');
-Undershoot      = getfield(S,'Undershoot');
-Peak            = getfield(S,'Peak')
-PeakTime        = getfield(S,'PeakTime');
+Stepinfo=stepinfo(partStep, partT, topValue,'SettlingTimeThreshold',ST);
+
+%Extract step info to variables for easy handling
+RiseTime        = getfield(Stepinfo,'RiseTime');
+SettlingTime    = getfield(Stepinfo,'SettlingTime');
+SettlingMin     = getfield(Stepinfo,'SettlingMin');
+SettlingMax     = getfield(Stepinfo,'SettlingMax');
+Overshoot       = getfield(Stepinfo,'Overshoot');
+Undershoot      = getfield(Stepinfo,'Undershoot');
+Peak            = getfield(Stepinfo,'Peak');
+PeakTime        = getfield(Stepinfo,'PeakTime');
+
+%Display stepinfo with correct units
+disp(strcat('RiseTime:',num2str(RiseTime),'[s]'))
+disp(strcat('SettlingTime:',num2str(SettlingTime),'[s]'))
+disp(strcat('SettlingMin:',num2str(SettlingMin),'[m]'))
+disp(strcat('SettlingMax:',num2str(SettlingMax),'[m]'))
+disp(strcat('Overshoot:',num2str(Overshoot),'[%]'))
+disp(strcat('Undershoot:',num2str(Undershoot),'[%]'))
+disp(strcat('Peak:',num2str(Peak),'[m]'))
+disp(strcat('PeakTime:',num2str(PeakTime),'[s]'))
+
+
+
+
+disp()M;
 %%
 
 
