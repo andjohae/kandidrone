@@ -17,10 +17,10 @@ ymax = 3.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Uncomment valid path
 
-filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/',name);
+%filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/',name);
 %filename = strcat('/Users/emilrosenberg/Dropbox/Kandidatarbete/Matdata/Logfiler/',name);
 %filename = strcat('/Users/JoachimBenjaminsson/Dropbox/Kandidatarbete/Matdata/Logfiler/',name);
-%filename = strcat('/Users/kalle/Dropbox/Kandidatarbete/Matdata/Logfiler/',name);
+filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/',name);
 delimiter = ',';
 %Format
 formatSpec = '%f%f%f%f%f%f%f%f%f%s%f%f%f%f%f%f%f%f%[^\n\r]';
@@ -53,7 +53,8 @@ Control_uyaw = dataArray{:, 18};
 %%Clear temporary variables
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
-%%Plot data
+%% Plot all data
+
 
 deltaT = 1/15;
 t=linspace(1,length(State_x),length(State_x));
@@ -129,15 +130,39 @@ title('Control signals from PID');
 legend('Control_ux','Control_uy','Control_uz','Control_uyaw');
 axis(axisVector);
 xlabel('Tid [s]')
-
+%}
 %%
+clf;
+clc;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Set stepvalues (base and top)
+baseValue = 1;
+topValue = 1.5;
+%Choose which state to monitor
+chosenState = 'z';    % x,y or z
+disp(strcat('Chosen state: ',chosenState))
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%Extract chosen data
+if chosenState == 'x'
+    Goal = Goal_x;
+    State = State_x;
+elseif chosenState == 'y'
+    Goal = Goal_y;
+    State = State_y;
+else
+    Goal = Goal_z;
+    State = State_z;
+end
+
+%Prepare t-vector
 deltaT = 1/15;
-t=linspace(1,length(State_x),length(State_x));
+t=linspace(1,length(State),length(State));
 t=t';
 t=t.*deltaT;
 
-
+%Plot steps and responses
+%{
 figure(2)
 subplot(3,1,1)
 title('x-koordinat')
@@ -155,15 +180,51 @@ plot(t,State_y)
 legend('y-goal','y-state');
 hold off
 
-subplot(3,1,3)
+%subplot(3,1,3)
+
 title('z-koordinat')
 hold on
 plot(t,Goal_z)
 plot(t,State_z)
 legend('z-goal','z-state');
 hold off
+%}
 
+%Extract startIndex and endIndex
+startIndex = 0;
+endIndex = 0;
+i = 1;
+while i<length(Goal)
+    if Goal(i)==topValue
+       startIndex = i;
+       break;
+    end
+    i = i+1;
+end
+while i<length(Goal)
+    if Goal(i)==baseValue
+       endIndex = i;
+       break;
+    end
+    i = i+1;
+end
 
+%Extract important information
+partStep = State(startIndex:endIndex-1);
+partGoal = Goal(startIndex:endIndex-1);
+partT = t(startIndex:endIndex-1);
+
+%Get stepinfo
+ST=0.05;    % 5 percent tolerance for SettlingTime
+S=stepinfo(partStep, partT, topValue,'SettlingTimeThreshold',ST);
+RiseTime        = getfield(S,'RiseTime')
+SettlingTime    = getfield(S,'SettlingTime')
+SettlingMin     = getfield(S,'SettlingMin');
+SettlingMax     = getfield(S,'SettlingMax');
+Overshoot       = getfield(S,'Overshoot');
+Undershoot      = getfield(S,'Undershoot');
+Peak            = getfield(S,'Peak')
+PeakTime        = getfield(S,'PeakTime');
 %%
 
 
