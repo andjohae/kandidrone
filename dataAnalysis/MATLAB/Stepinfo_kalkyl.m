@@ -3,7 +3,7 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-name = 'mission-2015-03-03_03-22-51.txt';
+name = 'mission-2015-03-03_03-36-41.txt';
 xmin = 0;   %xmax set automatically
 ymin = -3.5;
 ymax = 3.5;
@@ -137,7 +137,10 @@ clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Choose which state to monitor
 chosenState = 'x';    % x,y or z
-disp(strcat('Chosen state: ',chosenState))
+%Remove points at end of step if no SettlingTime is found
+shift = 10;
+%Set tolerance [%] used by SettlingTime
+ST=0.05;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Extract chosen data
@@ -210,10 +213,11 @@ while i<length(Goal)
     i = i+1;
 end
 
-%Extract important information
-partStep = State(startIndex:endIndex-1);
-partGoal = Goal(startIndex:endIndex-1);
-partT = t(startIndex:endIndex-1);
+%Extract important information 
+partStep = State(startIndex:endIndex-shift);
+partGoal = Goal(startIndex:endIndex-shift);
+partT = t(startIndex:endIndex-shift);
+partT = partT-min(partT);   %Set t=0 at start of step
 
 %Plot step for reference
 clf;
@@ -227,7 +231,6 @@ ylabel('Distans[m]')
 title(strcat('Steg i ledden:',chosenState))
 
 %Get stepinfo
-ST=0.05;    % 5 percent tolerance for SettlingTime
 Stepinfo=stepinfo(partStep, partT, topValue,'SettlingTimeThreshold',ST);
 
 %Extract step info to variables for easy handling
@@ -241,7 +244,9 @@ Peak            = getfield(Stepinfo,'Peak');
 PeakTime        = getfield(Stepinfo,'PeakTime');
 
 %Display stepinfo with correct units
+disp(strcat('Chosen state: ',chosenState))
 disp(strcat('RiseTime:',num2str(RiseTime),'[s]'))
+disp(strcat('Tolerance of SettlingTime:',num2str(100*ST),' [%]'))
 disp(strcat('SettlingTime:',num2str(SettlingTime),'[s]'))
 disp(strcat('SettlingMin:',num2str(SettlingMin),'[m]'))
 disp(strcat('SettlingMax:',num2str(SettlingMax),'[m]'))
@@ -250,12 +255,8 @@ disp(strcat('Undershoot:',num2str(Undershoot),'[%]'))
 disp(strcat('Peak:',num2str(Peak),'[m]'))
 disp(strcat('PeakTime:',num2str(PeakTime),'[s]'))
 
-
-
-
-disp()M;
-%%
-
+%% Old code by Adam and Emil
+%{
 
 %Feltolerans
 t_err=0.1;
@@ -330,8 +331,4 @@ tz=(startiz:endiz);
 staz=State_z(startiz:endiz);
 Sz=stepinfo(State_z(startiz:endiz),tz,max(Goal_z),'SettlingTimeThreshold',0.1)
 end
-
-
-
-
-
+%}
