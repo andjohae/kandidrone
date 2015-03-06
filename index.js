@@ -1,4 +1,4 @@
-var arDrone = require('../node-ar-drone');
-var autonomy = require('../ardrone-autonomy');
+var arDrone = require('ar-drone');
+var autonomy = require('ardrone-autonomy');
 
 console.log('Hello world')
