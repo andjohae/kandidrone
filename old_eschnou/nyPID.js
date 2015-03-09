@@ -13,6 +13,7 @@ nyPID.prototype.configure = function(kp,ki,kd) {
 nyPID.prototype.reset = function() {
     this._last_time = 0;
     this._last_error = Infinity;
+    this._last_error_2 = Infinity;
     this._error_sum = 0;
     this._last_command = 0;
 }
@@ -37,6 +38,7 @@ nyPID.prototype.getCommand = function(e) {
     // Update our trackers
     this._last_time = time;
     this._last_error = e;
+    this._last_error_2 = 
 
     // Compute commands
     var command = (this._kp * (e - this._last_error)
