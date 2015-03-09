@@ -4,10 +4,22 @@
   "description": "Bachelor thesis project at Chalmers University of Technology.",
   "author": "Andreas Johansson <and.johansson93@gmail.com>",
   "contributors": [
-      {"name": "Karl Svensson", "email": ""},
-      {"name": "Adam Josefsson", "email": ""},
-      {"name": "Emil Rosenberg", "email": ""},
-      {"name": "Joachim Benjaminsson", "email": ""}
+    {
+      "name": "Karl Svensson",
+      "email": ""
+    },
+    {
+      "name": "Adam Josefsson",
+      "email": ""
+    },
+    {
+      "name": "Emil Rosenberg",
+      "email": ""
+    },
+    {
+      "name": "Joachim Benjaminsson",
+      "email": ""
+    }
   ],
   "main": "index.js",
   "scripts": {
@@ -22,6 +34,10 @@
   },
   "homepage": "https://github.com/andjohae/kandidrone",
   "engines": {
-      "node": "*"
+    "node": "*"
+  },
+  "dependencies": {
+    "ar-drone": "^0.3.3",
+    "ardrone-autonomy": "^0.1.2"
   }
 }
