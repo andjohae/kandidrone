@@ -3,7 +3,7 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-name = 'mission-2015-03-06_03-53-36.txt';
+name = 'mission-2015-03-09_11-13-52.txt';
 xmin = 0;   %xmax set automatically
 ymin = -3.5;
 ymax = 3.5;
