@@ -3,10 +3,10 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-name = 'mission-2015-03-09_11-13-52.txt';
+name = 'mission-2015-03-10_11-49-45.txt';
 xmin = 0;   %xmax set automatically
-ymin = -3.5;
-ymax = 3.5;
+ymin = -2;
+ymax = 2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %If file contains 'Infinity', textscan will return error
 %Resolve this by replacing every occurence with 'NaN'
@@ -17,10 +17,10 @@ ymax = 3.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Uncomment valid path
 
-%filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
+filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
 %filename = strcat('/Users/emilrosenberg/Dropbox/Kandidatarbete/Matdata/Logfiler/kommenterade/',name);
 %filename = strcat('/Users/JoachimBenjaminsson/Dropbox/Kandidatarbete/Matdata/Logfiler/kommenterade/',name);
-filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
+%filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
 delimiter = ',';
 %Format
 formatSpec = '%f%f%f%f%f%f%f%f%f%s%f%f%f%f%f%f%f%f%[^\n\r]';
@@ -136,7 +136,7 @@ clf;
 clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Choose which state to monitor
-chosenState = 'z';    % x,y or z
+chosenState = 'y';    % x,y or z
 %Remove points at end of step if no SettlingTime is found min 1
 shift = 30;
 %Set tolerance [%] used by SettlingTime
