@@ -3,7 +3,7 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-name = 'mission-2015-03-10_11-49-45.txt';
+name = 'mission-2015-03-10_06-44-42.txt';
 xmin = 0;   %xmax set automatically
 ymin = -2;
 ymax = 2;
@@ -17,7 +17,7 @@ ymax = 2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Uncomment valid path
 
-filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
+filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/all/',name);
 %filename = strcat('/Users/emilrosenberg/Dropbox/Kandidatarbete/Matdata/Logfiler/kommenterade/',name);
 %filename = strcat('/Users/JoachimBenjaminsson/Dropbox/Kandidatarbete/Matdata/Logfiler/kommenterade/',name);
 %filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
