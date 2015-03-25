@@ -3,7 +3,8 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-name = 'mission-2015-03-09_11-13-52.txt';
+n = 'mission-2015-03-06_04-21-41';
+name = strcat(n,'.txt');
 xmin = 0;   %xmax set automatically
 ymin = -3.5;
 ymax = 3.5;
@@ -23,11 +24,11 @@ ymax = 3.5;
 filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
 delimiter = ',';
 %Format
-formatSpec = '%f%f%f%f%f%f%f%f%f%s%f%f%f%f%f%f%f%f%[^\n\r]';
+formatSpecNum = '%f%f%f%f%f%f%f%f%f%s%f%f%f%f%f%f%f%f%[^\n\r]';
 %Open file
 fileID = fopen(filename,'r');
 %Read data
-dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter,  'ReturnOnError', false);
+dataArray = textscan(fileID, formatSpecNum, 'Delimiter', delimiter,  'ReturnOnError', false);
 %Close file
 fclose(fileID);
 %Allocate imported array to column variable names
@@ -54,7 +55,7 @@ Control_uyaw = dataArray{:, 18};
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 %% Plot all data
-
+%{
 
 deltaT = 1/15;
 t=linspace(1,length(State_x),length(State_x));
@@ -141,6 +142,10 @@ chosenState = 'z';    % x,y or z
 shift = 30;
 %Set tolerance [%] used by SettlingTime
 ST=0.05;
+%Parameters in chosen state [Kp,Ki,Kd]
+KParameters = [0.5,0.01,0.35];
+%Set axis values for plot [xmin 0 ymin ymax] xmax is set automatically
+axisLimits = [0 0 0.5 1.1];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Extract chosen data
@@ -219,6 +224,9 @@ partGoal = Goal(startIndex:endIndex-shift);
 partT = t(startIndex:endIndex-shift);
 partT = partT-min(partT);   %Set t=0 at start of step
 
+%Set xmax to last time position
+axisLimits(2) = max(partT);
+
 %Plot step for reference
 clf;
 hold on
@@ -229,11 +237,22 @@ legend('Step','Goal')
 xlabel('Tid[s]')
 ylabel('Distans[m]')
 title(strcat(name,'--Steg i ledden:',chosenState))
-
+axis(axisLimits)
+grid on
 %Get stepinfo
 Stepinfo=stepinfo(partStep, partT, topValue,'SettlingTimeThreshold',ST);
 
 %Extract step info to variables for easy handling
+numData=zeros(8,1);
+numData(1)      = getfield(Stepinfo,'RiseTime');
+numData(2)      = getfield(Stepinfo,'SettlingTime');
+numData(3)      = getfield(Stepinfo,'SettlingMin');
+numData(4)      = getfield(Stepinfo,'SettlingMax');
+numData(5)      = getfield(Stepinfo,'Overshoot');
+numData(6)      = getfield(Stepinfo,'Undershoot');
+numData(7)      = getfield(Stepinfo,'Peak');
+numData(8)      = getfield(Stepinfo,'PeakTime');
+%{
 RiseTime        = getfield(Stepinfo,'RiseTime');
 SettlingTime    = getfield(Stepinfo,'SettlingTime');
 SettlingMin     = getfield(Stepinfo,'SettlingMin');
@@ -242,8 +261,24 @@ Overshoot       = getfield(Stepinfo,'Overshoot');
 Undershoot      = getfield(Stepinfo,'Undershoot');
 Peak            = getfield(Stepinfo,'Peak');
 PeakTime        = getfield(Stepinfo,'PeakTime');
+%}
+%Convert to strings
+stringData = num2str(numData);
+
+%Collect fieldnames
+fieldnames = {  'RiseTime';
+                'SettlingTime';
+                'SettlingMin';
+                'SettlingMax';
+                'Overshoot';
+                'Undershoot';
+                'Peak';
+                'PeakTime'};
+%Convert fieldnames to char array for printing
+fieldnames = char(fieldnames);
 
 %Display stepinfo with correct units
+%{
 disp(strcat('Chosen state: ',chosenState))
 disp(strcat('RiseTime:',num2str(RiseTime),'[s]'))
 disp(strcat('Tolerance of SettlingTime:',num2str(100*ST),' [%]'))
@@ -254,7 +289,42 @@ disp(strcat('Overshoot:',num2str(Overshoot),'[%]'))
 disp(strcat('Undershoot:',num2str(Undershoot),'[%]'))
 disp(strcat('Peak:',num2str(Peak),'[m]'))
 disp(strcat('PeakTime:',num2str(PeakTime),'[s]'))
+%}
 
+%Specify format for numbers. Show 10 decimals in order to get nice columns
+%in file.
+formatSpecNum = '%.10f\t%.10f\t%.10f\t%.10f\t%.10f\t%.10f\t%.10f\t%.10f\n';
+formatSpecParam = '%.3f\t%.3f\t%.3f\t';
+
+%Specify file to write data into. Use 'w' to replace existing file; 'a' to
+%append to existing file.
+fileID = fopen('./stepinfo/measuredData.txt','a');
+
+%Generate file header when file is created, then comment out.
+%{
+fprintf(fileID,'Name                           \t');
+sarray={'State','Kp','Ki','Kd'};
+sarray=char(sarray);
+for i=1:size(sarray,1)
+    fprintf(fileID,char(sarray(i,:)));
+    fprintf(fileID,'\t');
+end
+for i=1:size(fieldnames,1)
+    fprintf(fileID,char(fieldnames(i,:)));
+    fprintf(fileID,'\t');
+end
+fprintf(fileID,'\n');
+%}
+
+%Print data on newline
+fprintf(fileID,strcat(name,'\t'));
+fprintf(fileID,strcat(chosenState,'    \t'));
+fprintf(fileID,formatSpecParam,KParameters);
+fprintf(fileID,formatSpecNum,numData);
+fclose(fileID);
+
+%Print plot to file
+print(strcat('./stepinfo/plots/',n),'-dpng')
 %% Old code by Adam and Emil
 %{
 
