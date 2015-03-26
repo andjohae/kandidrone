@@ -1,13 +1,13 @@
 var kandiDrone = exports;
 
 exports.tagSearch = require('./lib/tagSearch')
+exports.flightRoute = require('./lib/flightRoute')
 
 var arDrone = require('ar-drone');
 var autonomy = require('ardrone-autonomy');
 
-exports.createTagSearch = function (client, controller, mission, options) {
+exports.createTagSearch = function (client, controller, options) {
     var client = client || arDrone.createClient();
     var controller = controller || autonomy.control(client, options);
-    var mission = mission || autnonomy.createMission(client, controller, options);
-    return new kandiDrone.tagSearch(client, controller, mission, options);
+    return new kandiDrone.tagSearch(client, controller, options);
 }
