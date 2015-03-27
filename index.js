@@ -1,12 +1,13 @@
-//var kandiDrone = exports;
+var kandiDrone = exports;
+
+exports.tagSearch = require('./lib/tagSearch')
+exports.flightRoute = require('./lib/flightRoute')
+
 var arDrone = require('ar-drone');
 var autonomy = require('ardrone-autonomy');
 
-var client = new arDrone.createClient();
-var ctrl = new autonomy.control(client);
-var mission = new autonomy.createMission(client);
-
-client.resume();
-client.on('batteryChange', function (battery) {
-    console.log(battery)
-});
+exports.createTagSearch = function (client, options) {
+    var client = client || arDrone.createClient(options);
+    var camera = new autonomy.Camera(options);
+    return new kandiDrone.tagSearch(client, camera, options);
+}
