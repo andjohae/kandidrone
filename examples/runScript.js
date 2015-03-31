@@ -33,11 +33,11 @@ var navdata_options = (
   | navdata_option_mask(arDroneConstants.options.WIFI)
 );
 // Connect and configure the drone
-mission.client().config('general:navdata_demo', true);
-mission.client().config('general:navdata_visionDetect',true);
-mission.client().config('general:navdata_options', navdata_options);
-mission.client().config('video:video_channel', 3); // 0=front, 3=bottom
-mission.client().config('detect:detect_type', 12);
+client.config('general:navdata_demo', true);
+client.config('general:navdata_visionDetect',true);
+client.config('general:navdata_options', navdata_options);
+client.config('video:video_channel', 3); // 0=front, 3=bottom
+client.client().config('detect:detect_type', 12);
 
 // Add manual emergency landing command
 var exiting = false;
