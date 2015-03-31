@@ -14,3 +14,18 @@ var constants = require('ar-drone/lib/constants');
 // to detect.
 var kandiPrompt = require('../lib/kandiPrompt');
 var userInput = new kandiPrompt().getUI();
+
+// Add manual emergency landing command
+var exiting = false;
+process.on('SIGINT', function() {
+    if (exiting) {
+        process.exit(0);
+    } else {
+        console.log('Got SIGINT. Landing, press Control-C again to force exit.');
+        exiting = true;
+        controller.disable();
+        client.land(function() {
+            process.exit(0);
+        });
+    }
+});
