@@ -10,7 +10,7 @@ var client = arDrone.createClient(),
     kandiBrain = kandiDrone.createKandiBrain(client, controller, tagSearch)
 ;
 // Get constants from the arDrone module.
-var constants = require('ar-drone/lib/constants');
+var arDroneConstants = require('ar-drone/lib/constants');
 // Get user input to define the search area and optionally the number of tags
 // to detect.
 var kandiPrompt = require('../lib/kandiPrompt');
@@ -19,6 +19,25 @@ var dx = userInput.dx,
     dy = userInput.dy,
     n = userInput.n
 ;
+
+// Enable the mask and navdata options in the arDrone module
+// This part is partly copied from Eschnous ardrone-autonomy module
+function navdata_option_mask(c) {
+  return 1 << c;
+}
+// From the SDK.
+var navdata_options = (
+    navdata_option_mask(arDroneConstants.options.DEMO)
+  | navdata_option_mask(arDroneConstants.options.VISION_DETECT)
+  | navdata_option_mask(arDroneConstants.options.MAGNETO)
+  | navdata_option_mask(arDroneConstants.options.WIFI)
+);
+// Connect and configure the drone
+mission.client().config('general:navdata_demo', true);
+mission.client().config('general:navdata_visionDetect',true);
+mission.client().config('general:navdata_options', navdata_options);
+mission.client().config('video:video_channel', 3); // 0=front, 3=bottom
+mission.client().config('detect:detect_type', 12);
 
 // Add manual emergency landing command
 var exiting = false;
@@ -34,7 +53,6 @@ process.on('SIGINT', function() {
         });
     }
 });
-
 
 // Make the drone fly!
 kandiBrain.verifyArguments(dx, dy, n, kandiBrain.executeRoute);
