@@ -7,13 +7,18 @@ var arDrone = require('ar-drone'),
 var client = arDrone.createClient(),
     controller = autonomy.control(client),
     tagSearch = kandiDrone.createTagSearch(client, controller);
-    //kandiBrain = kandiDrone.createKandiBrain(client, controller, tagSearch);
+    kandiBrain = kandiDrone.createKandiBrain(client, controller, tagSearch)
+;
 // Get constants from the arDrone module.
 var constants = require('ar-drone/lib/constants');
 // Get user input to define the search area and optionally the number of tags
 // to detect.
 var kandiPrompt = require('../lib/kandiPrompt');
 var userInput = new kandiPrompt().getUI();
+var dx = userInput.dx,
+    dy = userInput.dy,
+    n = userInput.n
+;
 
 // Add manual emergency landing command
 var exiting = false;
@@ -29,3 +34,7 @@ process.on('SIGINT', function() {
         });
     }
 });
+
+
+// Make the drone fly!
+kandiBrain.verifyArguments(dx, dy, n, kandiBrain.executeRoute);
