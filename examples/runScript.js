@@ -60,7 +60,7 @@ function getUI (callback) {
 }
 
 function fly (dx, dy, n) {
-    kandiBrain.verifyArguments(dx, dy, n, kandiBrain.executeRoute)
+    kandiBrain.verifyArguments(dx, dy, n, kandiBrain.executeRoute, kandiBrain)
     //setTimeout(kandiBrain.executeRoute, 1000)
 }
 
