@@ -1,4 +1,5 @@
 // Required modules:
+var df = require('dateformat')
 var arDrone = require('ar-drone'),
     autonomy = require('ardrone-autonomy'),
     kandiDrone = require('..')
@@ -34,6 +35,8 @@ client.config('general:navdata_options', navdata_options);
 client.config('video:video_channel', 3); // 0=front, 3=bottom
 client.config('detect:detect_type', 12);
 
+kandiBrain.log("../dataAnalysis/Logfiler/all/mission-" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
+
 // Add manual emergency landing command
 var exiting = false;
 process.on('SIGINT', function() {
@@ -42,7 +45,7 @@ process.on('SIGINT', function() {
     } else {
         console.log('Got SIGINT. Landing, press Control-C again to force exit.');
         exiting = true;
-        controller.disable();
+        //controller.disable(); //kandiBrain.controller
         client.land(function() {
             process.exit(0);
         });
