@@ -56,14 +56,16 @@ function getUI (callback) {
     new kandiPrompt().getUI( function (userData) {
         var dx = userData.dx,
             dy = userData.dy,
-            n = userData.n
+            n = userData.n,
+            startPos = {x: userData.startX, y: userData.startY},
+            height = userData.height
         ;
-        callback(dx, dy, n);
+        callback(dx, dy, n, startPos, height);
     });
 }
 
-function fly (dx, dy, n) {
-    kandiBrain.verifyArguments(dx, dy, n, kandiBrain.executeRoute, kandiBrain)
+function fly (dx, dy, n, startPos, height) {
+    kandiBrain.verifyArguments(dx, dy, n, startPos, height, kandiBrain.executeRoute, kandiBrain)
     //setTimeout(kandiBrain.executeRoute, 1000)
 }
 
