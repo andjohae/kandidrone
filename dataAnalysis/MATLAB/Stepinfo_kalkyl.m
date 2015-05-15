@@ -3,15 +3,17 @@ clc;
 clf;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Set input file and plot limits. All you have to do! :)
-<<<<<<< HEAD
-n = 'mission-2015-03-06_04-21-41';
+%<<<<<<< HEAD
+n = 'mission-2015-05-06_10-34-41';
 name = strcat(n,'.txt');
-=======
-name = 'mission-2015-03-10_06-44-42.txt';
->>>>>>> 04426ff041cc4dfd1af1c4e9245aa1a866c52003
+
+%=======
+%name = 'mission-2015-03-10_06-44-42.txt';
+%>>>>>>> 04426ff041cc4dfd1af1c4e9245aa1a866c52003
 xmin = 0;   %xmax set automatically
-ymin = -2;
-ymax = 2;
+ymin = -0.2;
+ymax = 1.7;
+setpoint = 1.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %If file contains 'Infinity', textscan will return error
 %Resolve this by replacing every occurence with 'NaN'
@@ -22,10 +24,12 @@ ymax = 2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Uncomment valid path
 
-filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/all/',name);
+%filename = strcat('/Users/Adam-MBP/Documents/Kandidatarbete/Github/kandidrone/dataAnalysis/Logfiler/all/',name);
 %filename = strcat('/Users/emilrosenberg/Dropbox/Kandidatarbete/Matdata/Logfiler/kommenterade/',name);
 %filename = strcat('/Users/JoachimBenjaminsson/Dropbox/Kandidatarbete/Matdata/Logfiler/kommenterade/',name);
 %filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/kommenterade/',name);
+filename = strcat('/Users/kalle/Documents/Pill/GitHub/kandidrone/dataAnalysis/Logfiler/stegsvar/z-led/',name);
+
 delimiter = ',';
 %Format
 formatSpecNum = '%f%f%f%f%f%f%f%f%f%s%f%f%f%f%f%f%f%f%[^\n\r]';
@@ -58,16 +62,15 @@ Control_uyaw = dataArray{:, 18};
 %%Clear temporary variables
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
-%% Plot all data
-%{
-
+%%Plot all data
+clf;
 deltaT = 1/15;
 t=linspace(1,length(State_x),length(State_x));
 t=t';
 t=t.*deltaT;
  
-numRows = 3;
-numCols = 2;
+numRows = 2;
+numCols = 1;
 axisVector = [xmin t(length(t)) ymin ymax];
 
 figure(1)
@@ -78,7 +81,7 @@ plot(t,State_y)
 plot(t,State_z)
 plot(t,State_yaw)
 plot([t(1),t(length(t))],[0,0],'k')
-plot([t(1),t(length(t))],[1,1],'k')
+plot([t(1),t(length(t))],[setpoint,setpoint],'k')
 hold off
 legend('State x','State y','State z','State yaw');
 title('States-positions');
@@ -86,7 +89,7 @@ text(0, 1.5, name, 'Color', 'r');
 axis(axisVector);
 xlabel('Tid [s]')
 ylabel('Amplitud [m]')
-
+%{
 subplot(numRows,numCols,2)
 hold on
 plot(t,State_vx)
@@ -122,8 +125,8 @@ title('Errors-positions');
 legend('Ex','Ey','Ez','Eyaw');
 axis(axisVector);
 xlabel('Tid [s]')
-
-subplot(numRows,numCols,5)
+%}
+subplot(numRows,numCols,2)
 hold on
 plot(t,Control_ux)
 plot(t,Control_uy)
@@ -135,21 +138,21 @@ title('Control signals from PID');
 legend('Control_ux','Control_uy','Control_uz','Control_uyaw');
 axis(axisVector);
 xlabel('Tid [s]')
-%}
+
 %% Stepinfo
 clf;
 clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Choose which state to monitor
-chosenState = 'y';    % x,y or z
+chosenState = 'z';    % x,y or z
 %Remove points at end of step if no SettlingTime is found min 1
-shift = 30;
+shift = 40;
 %Set tolerance [%] used by SettlingTime
 ST=0.05;
 %Parameters in chosen state [Kp,Ki,Kd]
-KParameters = [0.5,0.01,0.35];
+KParameters = [0.8,0.1,0.35];
 %Set axis values for plot [xmin 0 ymin ymax] xmax is set automatically
-axisLimits = [0 0 0.5 1.1];
+axisLimits = [0 0 -0.2 1.7];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Extract chosen data
@@ -243,6 +246,8 @@ ylabel('Distans[m]')
 title(strcat(name,'--Steg i ledden:',chosenState))
 axis(axisLimits)
 grid on
+
+
 %Get stepinfo
 Stepinfo=stepinfo(partStep, partT, topValue,'SettlingTimeThreshold',ST);
 
@@ -328,7 +333,8 @@ fprintf(fileID,formatSpecNum,numData);
 fclose(fileID);
 
 %Print plot to file
-print(strcat('./stepinfo/plots/',n),'-dpng')
+print(strcat('./stepinfo/plots/png/',n),'-dpng')        %Png file
+matlab2tikz(strcat('./stepinfo/plots/tikz/',n,'.tex'));  %Tikz file
 %% Old code by Adam and Emil
 %{
 
