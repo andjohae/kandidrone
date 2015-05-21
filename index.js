@@ -9,7 +9,7 @@ var autonomy = require('ardrone-autonomy');
 exports.createTagSearch = function (client, controller, camera, options) {
     var client = client || arDrone.createClient(options);
     var controller = controller || new autonomy.Controller(client, options);
-    var camera = new autonomy.Camera(options);
+    var camera = camera || new autonomy.Camera(options);
     return new kandiDrone.tagSearch(client, camera, controller, options);
 }
 
