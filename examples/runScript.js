@@ -36,7 +36,7 @@ client.config('video:video_channel', 3); // 0=front, 3=bottom
 client.config('detect:detect_type', 12);
 
 kandiBrain.logData("../dataAnalysis/Logfiler/all/mission-" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
-kandiBrain.setTagLogPath('../log/tags_' + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt")
+kandiBrain.logTags('../logs/tags_' + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt")
 
 // Add manual emergency landing command
 var exiting = false;
