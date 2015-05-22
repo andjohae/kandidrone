@@ -35,10 +35,14 @@ client.config('general:navdata_options', navdata_options);
 client.config('video:video_channel', 3); // 0=front, 3=bottom
 client.config('detect:detect_type', 12);
 
-kandiBrain.logData("../dataAnalysis/Logfiler/all/mission-" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
-kandiBrain.logTags('../logs/tags_' + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt")
+//kandiBrain.logData("../dataAnalysis/Logfiler/all/mission-" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
+kandiBrain.logData("../logs/flights/flight_" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
+kandiBrain.logTags('../logs/tags/tags_' + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt")
 
 // Add manual emergency landing command
+/*
+    Changed the client/controller objects to the kandiBrain getters
+*/
 var exiting = false;
 process.on('SIGINT', function() {
     if (exiting) {
@@ -46,8 +50,8 @@ process.on('SIGINT', function() {
     } else {
         console.log('Got SIGINT. Landing, press Control-C again to force exit.');
         exiting = true;
-        //controller.disable(); //kandiBrain.controller
-        client.land(function() {
+        kandiBrain.getController().disable();
+        kandiBrain.getClient().land(function() {
             process.exit(0);
         });
     }
