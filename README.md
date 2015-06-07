@@ -45,11 +45,11 @@ node ./runScript.js
 ```
 
 You will then be prompted to define the search mission. The requested information you need to supply is
-1. Length of search area (in meters). - *mandatory*
-2. Width of search area  (in meters). - *mandatory*
-3. Number of tags to detect.
-4. Flight heigth (in meters).
-5. X-coordinate of the start position for the search area (in meters).
-6. Y-coordinate of the start position for the search area (in meters).
+Markup: 1. Length of search area (in meters). - *mandatory*
+        2. Width of search area  (in meters). - *mandatory*
+        3. Number of tags to detect.
+        4. Flight heigth (in meters).
+        5. X-coordinate of the start position for the search area (in meters).
+        6. Y-coordinate of the start position for the search area (in meters).
 
 **Note:** The coordinate system is defined with positive x-axis in the drones forward direction and positive y-axis to its right (as seen from the top of the drone).
