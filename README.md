@@ -5,7 +5,7 @@ Sweden 2015.
 ## Introduction
 A module for autonomously searching an area for tags using the quadcopter AR.Drone 2.0 which is developed by [Parrot](http://ardrone2.parrot.com/).
 
-This module is built on top of the following node.js libraries:
+This module is built on top of the following Node.js libraries:
 * [node-ar-drone](https://github.com/felixge/node-ar-drone)
 * [ardrone-autonomy](https://github.com/eschnou/ardrone-autonomy)
 
@@ -17,9 +17,18 @@ This module is built on top of the following node.js libraries:
 Since this module was part of a bachelor thesis project, no further development is currently planned.
 
 ## Getting started
+Here follows a short introduction of how to obtain and run the software, as well as a short user quide that explains it's intended use.
 
-Here follows a short introduction of how to obtain an run the software, as well as a short user quide that explains it's intended use.
+### Installing the software
 
-### Installing and running the software
+The software *kandiDrone* is available on [GitHub](https://github.com/andjohae/kandidrone) and can be installed using the node package manager:
+```bash
+npm install git://github.com/andjohae/kandidrone.git
+```
 
 ### User interaction
+
+To run the software, run the *runScript.js* file located the *examples* directory. Please make sure the *examples* folder is your working directory when running the program.
+```bash
+node ./runScript.js
+```
