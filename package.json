@@ -39,6 +39,7 @@
   "dependencies": {
     "ar-drone": "^0.3.3",
     "ardrone-autonomy": "^0.1.2",
-    "prompt": "^0.2.14"
+    "prompt": "^0.2.14",
+    "dateformat": "^2.5.1"
   }
 }
