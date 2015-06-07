@@ -54,3 +54,5 @@ You will then be prompted to define the search mission. The requested informatio
 6. Y-coordinate of the start position for the search area (in meters).
 
 **Note:** The coordinate system is defined with positive x-axis in the drones forward direction and positive y-axis to its right (as seen from the top of the drone).
+
+The drone can perform an emergency landing if necessary. Simply terminate the process in the terminal and the drone will immediately land. Hopefully.
