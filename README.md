@@ -37,7 +37,7 @@ The software *kandiDrone* is available on [GitHub](https://github.com/andjohae/k
 npm install git://github.com/andjohae/kandidrone.git
 ```
 
-### User interaction
+### User guide
 
 To run the software, run the *runScript.js* file located the *examples* directory. Please make sure the *examples* folder is your working directory when running the program.
 ```bash
