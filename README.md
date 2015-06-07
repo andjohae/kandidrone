@@ -16,7 +16,7 @@ This module is built on top of the following Node.js libraries:
 ## Features
 *kandiDrone* will control the AR.Drone to autonomously fly over a rectangular area, which have been specified by the user, and search for tags. The tags used are the *oriented roundel* that the AR.Drone 2.0 can detect using its built-in software. The tag positions will be saved when they're considered confirmed. When either the entire search area have been covered or the total number of tags to detect have been confirmed, the drone returns to its starting position.
 
-The module contanins:
+The module contains:
 * *kandiBrain* - Main submodule that plans the flight route given the user data that defines the search area. The submodule also executes the route and makes sure that the drone flies to the correct positions.
 * *tagSearch* - Submodule that handles the tag detection.
 * *runScript* - Executable script that initiates the program by binding all the necessary objects and setting the options for the drone.
