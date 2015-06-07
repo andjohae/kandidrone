@@ -41,7 +41,7 @@ kandiBrain.logTags('../logs/tags/tags_' + df(new Date(), "yyyy-mm-dd_hh-MM-ss") 
 
 // Manual emergency landing command
 /*
-    ***Note***: Please use objects from the getters in the kandiBrain object
+    NOTE: Please use objects from the getters in the kandiBrain object
     rather than the pre-defined objects already available in this file.
     Otherwise the process may exit without the drone landing and you will then
     lose control of the drone. In that case, restart the process and the drone
