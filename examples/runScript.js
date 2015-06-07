@@ -4,7 +4,7 @@ var arDrone = require('ar-drone'),
     autonomy = require('ardrone-autonomy'),
     kandiDrone = require('..')
 ;
-// Initiate and connect the different objects.
+// Initiate and bind the different objects.
 var client = arDrone.createClient(),
     controller = autonomy.control(client),
     tagSearch = kandiDrone.createTagSearch(client, controller);
@@ -12,8 +12,7 @@ var client = arDrone.createClient(),
 ;
 // Get constants from the arDrone module.
 var arDroneConstants = require('ar-drone/lib/constants');
-// Get user input to define the search area and optionally the number of tags
-// to detect.
+// Get the custom prompt for kandiDrone.
 var kandiPrompt = require('../lib/kandiPrompt');
 
 // Enable the mask and navdata options in the arDrone module
@@ -21,7 +20,7 @@ var kandiPrompt = require('../lib/kandiPrompt');
 function navdata_option_mask(c) {
   return 1 << c;
 }
-// From the SDK.
+// Enable navdata options
 var navdata_options = (
     navdata_option_mask(arDroneConstants.options.DEMO)
   | navdata_option_mask(arDroneConstants.options.VISION_DETECT)
@@ -35,13 +34,18 @@ client.config('general:navdata_options', navdata_options);
 client.config('video:video_channel', 3); // 0=front, 3=bottom
 client.config('detect:detect_type', 12);
 
+// Enable log files for flight data and confirmed tag positions.
 //kandiBrain.logData("../dataAnalysis/Logfiler/all/mission-" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
 kandiBrain.logData("../logs/flights/flight_" + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt");
 kandiBrain.logTags('../logs/tags/tags_' + df(new Date(), "yyyy-mm-dd_hh-MM-ss") + ".txt")
 
-// Add manual emergency landing command
+// Manual emergency landing command
 /*
-    Changed the client/controller objects to the kandiBrain getters
+    ***Note***: Please use objects from the getters in the kandiBrain object
+    rather than the pre-defined objects already available in this file.
+    Otherwise the process may exit without the drone landing and you will then
+    lose control of the drone. In that case, restart the process and the drone
+    will land.
 */
 var exiting = false;
 process.on('SIGINT', function() {
@@ -57,6 +61,7 @@ process.on('SIGINT', function() {
     }
 });
 
+// Prompt user for mission data. The prompt is defined in 'kandiPromt.js'.
 function getUI (callback) {
     new kandiPrompt().getUI( function (userData) {
         var dx = userData.dx,
@@ -69,9 +74,10 @@ function getUI (callback) {
     });
 }
 
+// Set the neccessary callback functions in order to use kandiBrain correctly.
 function fly (dx, dy, n, startPos, height) {
     kandiBrain.verifyArguments(dx, dy, n, startPos, height, kandiBrain.executeRoute, kandiBrain)
-    //setTimeout(kandiBrain.executeRoute, 1000)
 }
 
+// Start flight
 getUI(fly);
